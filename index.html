@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>9073 KNIGHTRIX</title>
+    <style>
+        /* Steam-like purple theme */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #171A21; /* Steam background color */
+            color: #c7d5e0; /* Light purple text */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #1B2838; /* Darker background for container */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+            max-width: 400px;
+            width: 100%;
+        }
+        h1 {
+            text-align: center;
+            color: #8c66f4; /* Steam blue for the title */
+            font-size: 28px;
+        }
+        h2 {
+            text-align: center;
+            color: #C7D5E0;
+            font-size: 18px;
+        }
+        p {
+            font-size: 14px;
+            text-align: center;
+            color: #c7d5e0;
+            margin-bottom: 20px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        label {
+            color: #9c66f4; /* Lighter blue for form labels */
+            font-size: 14px;
+        }
+        input[type="text"], input[type="number"], textarea {
+            padding: 10px;
+            background-color: #3c2a5e;
+            color: white;
+            border: 1px solid #c766f4;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        input[type="submit"] {
+            padding: 10px;
+            background-color: #d366f4;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        input[type="submit"]:hover {
+            background-color: #4a83ce;
+        }
+        textarea {
+            height: 100px;
+            resize: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>9073 KNIGHTRIX</h1>
+        <h2>Alliance Info Giver</h2>
+        <p>Provide your team's details and game plan below.</p>
+
+        <form id="signUpForm">
+            <label for="teamNumber">Team#:</label>
+            <input type="number" id="teamNumber" name="teamNumber" placeholder="Enter your team number" required>
+
+            <label for="gameStrat">GameStrat:</label>
+            <input type="text" id="gameStrat" name="gameStrat" placeholder="Enter your game strategy" required>
+
+            <label for="gamePlan">Game Plan:</label>
+            <textarea id="gamePlan" name="gamePlan" placeholder="Describe your game plan" required></textarea>
+
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("signUpForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+
+            let teamNumber = document.getElementById("teamNumber").value;
+            let gameStrat = document.getElementById("gameStrat").value;
+            let gamePlan = document.getElementById("gamePlan").value;
+
+            if (teamNumber && gameStrat && gamePlan) {
+                // Send data to Google Sheets
+                const scriptURL = 'https://script.google.com/macros/s/AKfycby-qhVsPpoTPp1MMHdb_SN7fH38ME-pC1wKy8BYEhxNFSnUIUZpYUJzjF8I4gAxb1gw/exec';
+                fetch(scriptURL, {
+                    method: 'POST',
+                    body: new URLSearchParams({
+                        'TeamNum': teamNumber,
+                        'GameStrat': gameStrat,
+                        'GamePlan': gamePlan
+                    })
+                })
+                .then(response => alert('Data submitted successfully!'))
+                .catch(error => console.error('Error!', error.message));
+            } else {
+                alert("Please fill in all fields!");
+            }
+        });
+    </script>
+</body>
+</html>
