@@ -68,7 +68,7 @@
             transition: background-color 0.3s ease;
         }
         input[type="submit"]:hover {
-            background-color: #4a83ce;
+            background-color: #b056e3; /* Slightly darker purple */
         }
         textarea {
             height: 100px;
@@ -86,8 +86,11 @@
             <label for="teamNumber">Team#:</label>
             <input type="number" id="teamNumber" name="teamNumber" placeholder="Enter your team number" required>
 
-            <label for="gameStrat">GameStrat:</label>
-            <input type="text" id="gameStrat" name="gameStrat" placeholder="Enter your game strategy" required>
+            <label for="autoPoints">Auto Points:</label>
+            <input type="number" id="autoPoints" name="autoPoints" placeholder="Enter your Average Autonomous Points" required>
+
+            <label for="teleopPoints">TeleOp Points:</label>
+            <input type="number" id="teleopPoints" name="teleopPoints" placeholder="Enter your Average TeleOp Points" required>
 
             <label for="gamePlan">Game Plan:</label>
             <textarea id="gamePlan" name="gamePlan" placeholder="Describe your game plan" required></textarea>
@@ -101,22 +104,31 @@
             e.preventDefault();
 
             let teamNumber = document.getElementById("teamNumber").value;
-            let gameStrat = document.getElementById("gameStrat").value;
+            let autoPoints = document.getElementById("autoPoints").value;
+            let teleopPoints = document.getElementById("teleopPoints").value;
             let gamePlan = document.getElementById("gamePlan").value;
 
-            if (teamNumber && gameStrat && gamePlan) {
-                // Send data to Google Sheets
+            // Ensure all fields are valid (optional due to 'required' attribute)
+            if (teamNumber && autoPoints && teleopPoints && gamePlan) {
                 const scriptURL = 'https://script.google.com/macros/s/AKfycby-qhVsPpoTPp1MMHdb_SN7fH38ME-pC1wKy8BYEhxNFSnUIUZpYUJzjF8I4gAxb1gw/exec';
                 fetch(scriptURL, {
                     method: 'POST',
                     body: new URLSearchParams({
                         'TeamNum': teamNumber,
-                        'GameStrat': gameStrat,
+                        'AutoPoints': autoPoints,
+                        'TeleOpPoints': teleopPoints,
                         'GamePlan': gamePlan
                     })
                 })
-                .then(response => alert('Data submitted successfully!'))
-                .catch(error => console.error('Error!', error.message));
+                .then(response => {
+                    if (response.ok) {
+                        alert('Data submitted successfully!');
+                        document.getElementById("signUpForm").reset(); // Clear the form
+                    } else {
+                        throw new Error("Submission failed");
+                    }
+                })
+                .catch(error => alert('Error! ' + error.message));
             } else {
                 alert("Please fill in all fields!");
             }
